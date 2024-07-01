@@ -6,15 +6,15 @@ const { cloudinary } = require("../cloudinary");
 module.exports.index = async (req, res) => {
     console.log(req.query);
     var audiobooks = await Audiobook.find({}).populate('popupText');
-    const { genre, title, author, sort } = req.query;
+    const { genre, title, AUTHOR, sort } = req.query;
     if (genre) {
         audiobooks = await Audiobook.find({ genre: { $in: genre } });
     }
     if (title) {
         audiobooks = await Audiobook.find({ title: { $regex: title, $options: 'i' } });
     }
-    if (author) {
-        audiobooks = await Audiobook.find({ author: { $in: author } });
+    if (AUTHOR) {
+        audiobooks = await Audiobook.find({ AUTHOR: { $regex: AUTHOR, $options: 'i' } });
     }
     if (sort == 'rating') {
         audiobooks = await Audiobook.find({}).sort({ rating: -1 });

@@ -3,7 +3,6 @@ const Review = require('./review')
 const Schema = mongoose.Schema;
 
 
-// https://res.cloudinary.com/douqbebwk/image/upload/w_300/v1600113904/YelpCamp/gxgle1ovzd2f3dgcpass.png
 
 const ImageSchema = new Schema({
     url: String,
@@ -32,6 +31,7 @@ const AudiobookSchema = new Schema({
     // },
     price: Number,
     description: String,
+    AUTHOR: String,
     genre: String,
     //add audio file that added in the form 
     author: {

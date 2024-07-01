@@ -7,7 +7,8 @@ module.exports.audiobookSchema = Joi.object({
         price: Joi.number().required().min(0),
         //image: Joi.string().required(),
         genre: Joi.string().required(),
-        description: Joi.string().required()
+        description: Joi.string().required(),
+        AUTHOR: Joi.string().required()
     }).required(),
     deleteImages: Joi.array()
 });

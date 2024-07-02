@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const ExpressError = require('../utils/ExpressError');
 
 module.exports.renderRegister = (req, res) => {
     res.render('users/register');
@@ -6,7 +7,19 @@ module.exports.renderRegister = (req, res) => {
 
 module.exports.register = async (req, res, next) => {
     try {
-        const { email, username, password } = req.body;
+        const { email, username, password } = req.body.user;
+
+        const existingEmail = await User.findOne({ email });
+        if (existingEmail) {
+            req.flash('error', 'Email already registered');
+            return res.redirect('register');
+        }
+
+        const existingUsername = await User.findOne({ username })
+        if (existingUsername) {
+            req.flash('error', 'Username already taken');
+            return res.redirect('register');
+        }
         const user = new User({ email, username });
         const registeredUser = await User.register(user, password);
         req.login(registeredUser, err => {

@@ -18,22 +18,10 @@ const opts = { toJSON: { virtuals: true } };
 const AudiobookSchema = new Schema({
     title: String,
     images: [ImageSchema],
-    // geometry: {
-    //     type: {
-    //         type: String,
-    //         enum: ['Point'],
-    //         required: true
-    //     },
-    //     coordinates: {
-    //         type: [Number],
-    //         required: true
-    //     }
-    // },
     price: Number,
     description: String,
     AUTHOR: String,
     genre: String,
-    //add audio file that added in the form 
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'

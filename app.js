@@ -44,6 +44,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    secret,
+    touchAfter: 24 * 3600 // time period in seconds
+});
+
+store.on("error", function (e) {
+    console.log("SESSION STORE ERROR", e);
+});
+
 const sessionConfig = {
     secret: 'secret',
     resave: false,
@@ -94,8 +104,10 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', { err })
 })
 
-app.listen(3000, () => {
-    console.log('Serving on port 3000')
-})
+const server = app.listen(port, '0.0.0.0', () => {
+    console.log(`Serving on port ${port}`);
+});
 
+server.keepAliveTimeout = 120000;  // 120 seconds
+server.headersTimeout = 120000;    // 120 seconds
 

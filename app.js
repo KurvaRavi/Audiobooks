@@ -14,7 +14,7 @@ const methodOverride = require('method-override');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo');
 
 const userRoutes = require('./routes/users');
 const audiobooksRoutes = require('./routes/audiobooks');
@@ -54,18 +54,26 @@ store.on("error", function (e) {
     console.log("SESSION STORE ERROR", e);
 });
 
-const sessionConfig = {
+// const sessionConfig = {
+//     secret: 'secret',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//         httpOnly: true,
+//         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+//         maxAge: 1000 * 60 * 60 * 24 * 7
+//     }
+// }
+// app.use(session(sessionConfig))
+app.use(session({
     secret: 'secret',
     resave: false,
     saveUninitialized: true,
-    cookie: {
-        httpOnly: true,
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-        maxAge: 1000 * 60 * 60 * 24 * 7
-    }
-}
+    store: MongoStore.create({ 
+        mongoUrl: process.env.DB_URL || 'mongodb://localhost:27017/mydatabase'
+    })
+}));
 
-app.use(session(sessionConfig))
 app.use(flash());
 
 app.use(passport.initialize());
@@ -105,7 +113,7 @@ app.use((err, req, res, next) => {
 })
 
 const port = process.env.PORT || 3000;
-const server = app.listen(port, '0.0.0.0', () => {
+const server = app.listen(port, () => {
     console.log(`Serving on port ${port}`);
 });
 

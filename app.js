@@ -19,8 +19,9 @@ const User = require('./models/user');
 const userRoutes = require('./routes/users');
 const audiobooksRoutes = require('./routes/audiobooks');
 const reviewRoutes = require('./routes/reviews');
-
-mongoose.connect('mongodb://0.0.0.0:27017/KukuFM', {
+// 'mongodb://0.0.0.0:27017/KukuFM'
+const dbUrl = process.env.DB_URL || 'mongodb://0.0.0.0:27017/KukuFM'
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,

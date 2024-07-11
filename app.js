@@ -44,11 +44,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
 
-const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    secret,
-    touchAfter: 24 * 3600 // time period in seconds
-});
 
 store.on("error", function (e) {
     console.log("SESSION STORE ERROR", e);
@@ -66,13 +61,19 @@ store.on("error", function (e) {
 // }
 // app.use(session(sessionConfig))
 app.use(session({
-    secret: 'secret',
+    secret: process.env.SECRET || 'secret',
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({ 
         mongoUrl: process.env.DB_URL || 'mongodb://localhost:27017/mydatabase'
     })
 }));
+
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    secret: process.env.SECRET || 'secret' ,
+    touchAfter: 24 * 3600 // time period in seconds
+});
 
 app.use(flash());
 

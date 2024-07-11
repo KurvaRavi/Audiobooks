@@ -45,10 +45,6 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
 
 
-store.on("error", function (e) {
-    console.log("SESSION STORE ERROR", e);
-});
-
 // const sessionConfig = {
 //     secret: 'secret',
 //     resave: false,
@@ -73,6 +69,10 @@ const store = MongoStore.create({
     mongoUrl: dbUrl,
     secret: process.env.SECRET || 'secret' ,
     touchAfter: 24 * 3600 // time period in seconds
+});
+
+store.on("error", function (e) {
+    console.log("SESSION STORE ERROR", e);
 });
 
 app.use(flash());

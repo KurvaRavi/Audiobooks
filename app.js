@@ -14,7 +14,7 @@ const methodOverride = require('method-override');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-const MongoStore = require('connect-mongo');
+const MongoStore = require('connect-mongo')(session);
 
 const userRoutes = require('./routes/users');
 const audiobooksRoutes = require('./routes/audiobooks');
@@ -104,6 +104,7 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', { err })
 })
 
+const port = process.env.PORT || 3000;
 const server = app.listen(port, '0.0.0.0', () => {
     console.log(`Serving on port ${port}`);
 });
